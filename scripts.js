@@ -1,18 +1,23 @@
 var con = document.querySelector(".container")
 var ccrd = document.querySelector(".child-card")
 var crd = document.querySelector(".card")
+var btn = document.querySelector("button")
 
-var inp=''
+let prodlist = [];
 
-function register(e){
-    inp=e.value;
+var inp = ''
+
+function register(e) {
+    inp = e.value;
 }
 
 
 
 function fetchdata() {
     fetch('https://fakestoreapi.com/products').then(res => res.json())
-        .then(json => createCard(json))
+        .then(json => {
+            prodlist = json
+            createCard(json)})
 }
 
 
@@ -36,8 +41,8 @@ function createCard(data) {
 
         var div = document.createElement("div")
         div.classList.add("card")
-        div.innerHTML = 
-        `
+        div.innerHTML =
+            `
         <div class="card" style="width: 17rem;">
             <img src="${val.image}" class="card-img-top" alt="...">
             <div class="card-body">
@@ -48,8 +53,46 @@ function createCard(data) {
             </div>
         </div>`
 
-      ccrd.appendChild(div)
+        ccrd.appendChild(div)
     });
 }
+
+
+function filterprd(qeury) {
+    const proddata = prodlist.find((proddata) => {
+        const prdname = proddata.title.toLowerCase();
+        console.log(prdname);
+        return prdname === qeury.toLowerCase();
+    });
+
+    if (proddata) {
+        var div = document.createElement("div")
+        div.classList.add("card")
+
+        while(ccrd.hasChildNodes()){
+            ccrd.removeChild(ccrd.lastChild);
+        }
+
+        div.innerHTML =
+            `
+        <div class="card" style="width: 17rem;">
+            <img src="${proddata.image}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">${proddata.title}</h5>
+                <p class="card-text">Category: ${proddata.category}</p>
+                <h5 class="card-title">Rating: ⭐ ${proddata.rating.rate}</h5>
+                <a href="#" class="btn btn-primary">Price: $ ${proddata.price}</a>
+            </div>
+        </div>`
+
+        ccrd.appendChild(div)
+    }
+}
+
+btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const prddname = inp;
+    filterprd(prddname);
+});
 
 fetchdata()
