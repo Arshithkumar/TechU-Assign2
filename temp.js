@@ -8,7 +8,6 @@ function fetchdata() {
 }
 
 
-
 function createCard(data) {
     data.forEach(val => {
         console.log(val);
