@@ -92,7 +92,17 @@ function filterprd(qeury) {
 btn.addEventListener("click", (e) => {
     e.preventDefault();
     const prddname = inp;
-    filterprd(prddname);
+    if(inp==''){
+        while(ccrd.hasChildNodes()){
+            ccrd.removeChild(ccrd.lastChild);
+        }
+
+        fetchdata()
+    }
+    else{
+        filterprd(prddname);
+    }
+    
 });
 
 fetchdata()
